@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:housingapp/constants/currentUser.dart';
 import 'package:housingapp/services/User.dart';
 import 'package:housingapp/services/database.dart';
 import 'package:housingapp/widgets/UserProfile.dart';
@@ -27,11 +28,14 @@ class userSearch extends StatefulWidget {
   _userSearchState createState() => _userSearchState();
 }
 
+//Widget w = Container();
+
 class _userSearchState extends State<userSearch> {
   database db = new database();
   String email = "";
-  List<searchTile> liste = [];
+  List<UserNew> liste = [];
   Widget w = Container();
+ // List<searchTile> liste = [];
   @override
   Widget build(BuildContext context) {
 
@@ -53,14 +57,21 @@ class _userSearchState extends State<userSearch> {
                   child: Icon(Icons.search), height: 40, width: 40,),
                   onTap: () {
 
-                    db.search_user_by_mail(email);
+                    db.search_user_by_mail(email,liste);
+                   // print(liste.last.email+ " EMAİL");
+                  //  print(Constants.myName+" MYEMAİL");
                     setState(() {
+                      //liste.clear();
 
+                      UserNew u = liste.last;
                       searchTile tile = new searchTile(
-                          userlist.last.email,userlist.last.name,userlist.last.surname);
-                      liste.clear();
+                          u.email,u.name,u.surname);
+                      //liste.add(tile);
+                    /*  liste.clear();
                       liste.add(tile);
-                      w=liste.last;
+                      w=liste.last;*/
+                     // w = tile;
+                      w = tile;
                     });
                   },),
               ],
@@ -79,8 +90,9 @@ class searchTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(crossAxisAlignment:CrossAxisAlignment.start,children: [Text(this.email,style: TextStyle(color: Colors.black),),Text(this.name,style: TextStyle(color: Colors.black)),Text(this.surname,style: TextStyle(color: Colors.black)), ],),Spacer(),IconButton(onPressed: () {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => chatRoom(this.email)),);
-    }, icon: Icon(Icons.chat))],));
+      List<messageTile> liste = db.getMessages(this.email);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => chatRoom(this.email,liste)),);
+    }, icon: Icon(Icons.chat)),AddFriendButton(this.email)],),);
   }
 }
  void addUser(UserNew u) {

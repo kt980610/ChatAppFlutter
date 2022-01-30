@@ -18,7 +18,7 @@ class auth {
       Constants.myName=email;
       Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()),);
     } on FirebaseAuthException catch (e) {
-
+     // Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()),);
       /* FirebaseFirestore.instance.collection("userCount").doc("usercount").snapshots().listen((event) { Map<String, dynamic> data = event.data()!;
 
       // You can then retrieve the value from the Map like this:

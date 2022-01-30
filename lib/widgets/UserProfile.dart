@@ -4,6 +4,8 @@ import 'package:housingapp/pages/navpages/bar_item_page.dart';
 import 'package:housingapp/pages/navpages/home_page.dart';
 import 'package:housingapp/pages/navpages/my_page.dart';
 import 'package:housingapp/pages/navpages/search_page.dart';
+import 'package:housingapp/services/database.dart';
+import 'package:housingapp/pages/navpages/chatRoom.dart';
 class UserProfile extends StatelessWidget {
   String imagepath;
   String nameSurname;
@@ -104,6 +106,31 @@ class AddButtonState extends State<AddButton> {
   void added() {
     setState(() {
       i = Icon(Icons.check,color: Colors.white,);
+    });
+
+  }
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(onPressed: added, icon: i,);
+  }
+
+
+}
+class AddFriendButton extends StatefulWidget {
+  late String email;
+  AddFriendButton(this.email);
+  @override
+  State<AddFriendButton> createState() => AddFriendButtonState(this.email);
+
+}
+class AddFriendButtonState extends State<AddFriendButton> {
+  String email;
+  AddFriendButtonState(this.email);
+  Icon i = Icon(Icons.add,color: Colors.white,);
+  void added() {
+    setState(() {
+      i = Icon(Icons.check,color: Colors.white,);
+      db.create_chatroom(this.email);
     });
 
   }

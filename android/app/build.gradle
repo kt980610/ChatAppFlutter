@@ -72,4 +72,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     //classpath 'com.google.gms:google-services:4.3.10'
     implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 }
