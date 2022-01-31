@@ -15,21 +15,40 @@ class database {
   database();
 
 
-  search_user_by_mail(String mail, List<UserNew> liste) async {
-    UserNew u = new UserNew();
-    await FirebaseFirestore.instance.collection("Users").doc(mail).collection("kimlik").doc("email").snapshots().listen((event) { Map<String, dynamic> data = event.data()!;
-    u.setEmail(data['email']);
-    });
-    // You can then retrieve the value from the Map like this:
-    FirebaseFirestore.instance.collection("Users").doc(mail).collection("kimlik").doc("isim").snapshots().listen((event) { Map<String, dynamic> data = event.data()!;
-    u.setName(data['isim']); });
-    FirebaseFirestore.instance.collection("Users").doc(mail).collection("kimlik").doc("soyisim").snapshots().listen((event) { Map<String, dynamic> data = event.data()!;
-    u.setSurname(data['soyisim']); });
+ /*void search_user_by_mail(String mail, List<UserNew> liste) async {
+
+   UserNew u = new UserNew();
+      DocumentReference docref = FirebaseFirestore.instance.collection("Users").
+
+   
+      FirebaseFirestore.instance.collection("Users").doc(mail).collection(
+          "kimlik").doc("email").snapshots().listen((event) {
+        Map<String, dynamic> data = event.data()!;
+        u.setEmail(data['email']);
+      });
+      // You can then retrieve the value from the Map like this:
+      FirebaseFirestore.instance.collection("Users").doc(mail).collection(
+          "kimlik").doc("isim").snapshots().listen((event) {
+        Map<String, dynamic> data = event.data()!;
+        u.setName(data['isim']);
+      });
+      FirebaseFirestore.instance.collection("Users").doc(mail).collection(
+          "kimlik").doc("soyisim").snapshots().listen((event) {
+        Map<String, dynamic> data = event.data()!;
+        u.setSurname(data['soyisim']);
+
+      });
+
+      //return u;
+      //print(u.email+" EMAİL");
+      liste.add(u);
+
    //  userlist.add(u);
-    liste.add(u);
+   // liste.add(u);
 
 
-  }
+
+  }*/
 
   void create_chatroom(String email) async{
     await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messageCount").set({"count":0});
