@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:housingapp/constants/currentUser.dart';
@@ -56,22 +57,41 @@ class _userSearchState extends State<userSearch> {
                 GestureDetector(child: Container(
                   child: Icon(Icons.search), height: 40, width: 40,),
                   onTap: () {
-
-                    db.search_user_by_mail(email,liste);
+                     //liste.clear();
+                    CollectionReference cr = FirebaseFirestore.instance.collection("Users").doc(email).collection("kimlik");
                    // print(liste.last.email+ " EMAİL");
-                  //  print(Constants.myName+" MYEMAİL");
+
                     setState(() {
                       //liste.clear();
 
-                      UserNew u = liste.last;
-                      searchTile tile = new searchTile(
-                          u.email,u.name,u.surname);
+                      UserNew u = FutureBuilder<DocumentSnapshot>(
+                          future: cr.doc("email"),
+
+                          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                           UserNew u1 = new UserNew();
+                                          if (snapshot.connectionState == ConnectionState.done) {
+                                            Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+
+                                            u1.setEmail(data['email']);
+                                            return u1;
+                                          }
+                                          else {
+                                            return
+                                          }
+                                        },) as UserNew;
+
+    //db.search_user_by_mail(email,liste);
+
+                      //UserNew u = liste.last;
+                     // print(liste.length.toString()+ " SİZE");
+                      //searchTile tile = new searchTile(
+                          //u.email,u.name,u.surname);
                       //liste.add(tile);
                     /*  liste.clear();
                       liste.add(tile);
                       w=liste.last;*/
                      // w = tile;
-                      w = tile;
+                     // w = tile;
                     });
                   },),
               ],
