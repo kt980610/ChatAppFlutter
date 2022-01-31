@@ -34,7 +34,7 @@ class userSearch extends StatefulWidget {
 class _userSearchState extends State<userSearch> {
   database db = new database();
   String email = "";
-  List<UserNew> liste = [];
+
   Widget w = Container();
  // List<searchTile> liste = [];
   @override
@@ -58,28 +58,28 @@ class _userSearchState extends State<userSearch> {
                   child: Icon(Icons.search), height: 40, width: 40,),
                   onTap: () {
                      //liste.clear();
-                    CollectionReference cr = FirebaseFirestore.instance.collection("Users").doc(email).collection("kimlik");
+
                    // print(liste.last.email+ " EMAİL");
-
+                    List<UserNew> liste = [];
                     setState(() {
+
+                     /* db.search_user_by_mail(email, liste);
+                      UserNew u = liste.last;
+                      searchTile tile = new searchTile(u.email, u.name, u.surname);
+                      w = tile;*/
+
+                      FirebaseFirestore.instance.collection("Users2").doc(email).snapshots().listen((event) {
+                        Map<String, dynamic> data = event.data()!;
+                        searchTile tile = new searchTile(data['email'],data['isim'],data['soyisim']);
+                      w = tile;
+                      print(data['email']);
+
+                      });
                       //liste.clear();
-
-                      UserNew u = FutureBuilder<DocumentSnapshot>(
-                          future: cr.doc("email"),
-
-                          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                           UserNew u1 = new UserNew();
-                                          if (snapshot.connectionState == ConnectionState.done) {
-                                            Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-
-                                            u1.setEmail(data['email']);
-                                            return u1;
-                                          }
-                                          else {
-                                            return
-                                          }
-                                        },) as UserNew;
-
+                      //db.create_chatroom(email);
+                      //db.addMessage("message", email);
+                     // FutureBuilder f=db.search_user_by_mail(email);
+                     // Widget w=db.search_user_by_mail(email);
     //db.search_user_by_mail(email,liste);
 
                       //UserNew u = liste.last;
@@ -110,8 +110,32 @@ class searchTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(crossAxisAlignment:CrossAxisAlignment.start,children: [Text(this.email,style: TextStyle(color: Colors.black),),Text(this.name,style: TextStyle(color: Colors.black)),Text(this.surname,style: TextStyle(color: Colors.black)), ],),Spacer(),IconButton(onPressed: () {
-      List<messageTile> liste = db.getMessages(this.email);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => chatRoom(this.email,liste)),);
+      List<messageTile> liste = [];
+      ChatRoomInfo info= new ChatRoomInfo();//db.getMessages(this.email);
+      FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messageCount").snapshots().listen((event) { Map<String, dynamic>? data = event.data()!;
+      //info.setCount(data["count"]);
+      info.setCount(data["count"]);
+      for (var i=info.message_count;i>0;i--) {
+        message m = new message();
+        FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc(i.toString()).snapshots().listen((event) { Map<String, dynamic>? data = event.data()!;
+        m.setMessage(data["message"]);
+        m.setSendBy(data["sendby"]);
+        m.setDate(data["date"]);
+        messageTile tile = new messageTile(m.date, m.sendby, m.mesaj);
+        liste.add(tile);
+        });
+
+      }
+      Navigator.push(context, MaterialPageRoute(builder: (context) => chatRoom(email, liste)),);
+
+
+
+
+
+
+
+      });
+
     }, icon: Icon(Icons.chat)),AddFriendButton(this.email)],),);
   }
 }

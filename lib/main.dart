@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:housingapp/pages/navpages/main_page.dart';
 import 'package:housingapp/pages/welcome_page.dart';
+//import 'package:flutter/widgets.dart';
 import 'dart:ui';
 import 'package:housingapp/services/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
