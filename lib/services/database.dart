@@ -14,9 +14,17 @@ import 'package:housingapp/pages/navpages/chatRoom.dart';
 class database {
   database();
    search_user_by_mail(String mail,List<UserNew> liste) async {
+     DocumentSnapshot ds = await FirebaseFirestore.instance.collection("Users2").doc(mail).get();
+     String name = ds.get("isim");
+     String surname = ds.get("soyisim");
+     String email = ds.get("email");
 
 
-      UserNew u = new UserNew();
+     UserNew u = new UserNew();
+     u.setEmail(email);
+     u.setName(name);
+     u.setSurname(surname);
+     liste.add(u);
      // DocumentReference docref = FirebaseFirestore.instance.collection("Users").
 
    
@@ -37,14 +45,14 @@ class database {
         u.setSurname(data['soyisim']);
 
       });*/
-      FirebaseFirestore.instance.collection("Users2").doc(mail).snapshots().listen((event) {
+     /* FirebaseFirestore.instance.collection("Users2").doc(mail).snapshots().listen((event) {
         Map<String, dynamic> data = event.data()!;
         u.setEmail(data['email']);
         u.setName(data['isim']);
         u.setSurname(data['soyisim']);
         liste.add(u);
       });
-
+      */
       //return u;
       //print(u.email+" EMAİL");
 
@@ -93,114 +101,64 @@ class database {
 
   }
   void addMessage(String message_sent, String email) async {
-   // int message_count=0;
-    ChatRoomInfo info = new ChatRoomInfo();
-    try {
-      String s = DateTime.now().toString();
-     /* await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messageCount").snapshots().listen((event) {Map<String, dynamic>? data = event.data()!;
-      int count = data["count"]+1;
-      //FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messageCount").set({"count":count});
-      info.setCount(count);
-      //info.setCount(count);await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc(info.message_count.toString()).set({"message":message_sent,"sendby":Constants.myName,"date":s});
-      //FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc(count.toString()).set({"message":message_sent,"sendby":Constants.myName,"date":s});
-      });
-      await FirebaseFirestore.instance.collection(email).doc("chatroom").collection(Constants.myName).doc("messageCount").snapshots().listen((event) {Map<String, dynamic>? data = event.data()!;
-      int count = data["count"]+1;
-     FirebaseFirestore.instance.collection(email).doc("chatroom").collection(Constants.myName).doc("messageCount").set({"count": count});*/
-   // info.setCount(count);
-      //this.addnewMessage(email, s, count, message_sent);
-       //info.setCount(count);
-     // FirebaseFirestore.instance.collection(email).doc("chatroom").collection(Constants.myName).doc(count.toString()).set({"message":message_sent,"sendby":Constants.myName,"date":s});
-        //print(count.toString()+" COUNT");
-      //});
-     FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messageCount").snapshots().listen((event) {
-       Map<String, dynamic>? data = event.data()!;
-       FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc(info.message_count.toString()).set({"message":message_sent,"sendby":Constants.myName,"date":s});
-     }) ;
-      FirebaseFirestore.instance.collection(email).doc("chatroom").collection(Constants.myName).doc("messageCount").snapshots().listen((event) {
-        Map<String, dynamic>? data = event.data()!;
-        FirebaseFirestore.instance.collection(email).doc("chatroom").collection(Constants.myName).doc(info.message_count.toString()).set({"message":message_sent,"sendby":Constants.myName,"date":s});
-      }) ;
 
-      //await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messageCount").set({"count":info.message_count});
-    //  await FirebaseFirestore.instance.collection(email).doc("chatroom").collection(Constants.myName).doc("messageCount").set({"count":info.message_count});
-    // await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc(info.message_count.toString()).set({"message":message_sent,"sendby":Constants.myName,"date":s});
-    // await FirebaseFirestore.instance.collection(email).doc("chatroom").collection(Constants.myName).doc(info.message_count.toString()).set({"message":message_sent,"sendby":Constants.myName,"date":s});
-     /* await FirebaseFirestore.instance.collection("chatroom").doc(email+"_"+Constants.myName).collection("messagcount").doc("messagecount").snapshots().listen((event) {Map<String, dynamic>? data = event.data()!;
-        info.setCount(data["count"]);});
 
-      await FirebaseFirestore.instance.collection("chatroom").doc(email+"_"+Constants.myName).collection("messagecount").doc("messagecount").set({"count":info.message_count+1});
-      await FirebaseFirestore.instance.collection("chatroom").doc(email+"_"+Constants.myName+"_"+s).collection("messages").doc((info.message_count+1).toString()).set({"date":s,"sendby":Constants.myName,"message":message_sent});
-      await FirebaseFirestore.instance.collection("chatroom").doc(Constants.myName+"_"+email+"_"+s).collection("messages").doc((info.message_count+1).toString()).set({"date":s,"sendby":Constants.myName,"message":message_sent});
+    DocumentSnapshot ds = await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messagecount").get();
+    int messagecount = ds.get("count");
 
-      this.getMessages(email, s);*/
-      /*await FirebaseFirestore.instance.collection("chatroom").doc(Constants.myName+"_"+email+"_"+s).set({"date":s,"sendby": Constants.myName,"message":message_sent});
-      await FirebaseFirestore.instance.collection("chatroom").doc(email+"_"+Constants.myName+"_"+s).set({"date":s,"sendby": Constants.myName,"message":message_sent});
-      this.getMessages(email, s);*/
-     // this.getMessages(email);
+    int count = messagecount+1;
+
+    String date = DateTime.now().toString();
+    await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messagecount").set({"count":count});
+    await FirebaseFirestore.instance.collection(email).doc("chatroom").collection(Constants.myName).doc("messagecount").set({"count":count});
+    await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc(count.toString()).set({"message":message_sent,"date":date,"sendby":Constants.myName});
+    await FirebaseFirestore.instance.collection(email).doc("chatroom").collection(Constants.myName).doc(count.toString()).set({"message":message_sent,"date":date,"sendby":Constants.myName});
+
+  }
+ void getLastMessage(String email,List<messageTile> liste) async {
+    DocumentSnapshot ds = await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messagecount").get();
+    int messagecount = ds.get("count");
+    DocumentSnapshot ds2 = await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc(messagecount.toString()).get();
+    String date = ds2.get("date");
+    String message = ds2.get("message");
+    String sendby = ds2.get("sendby");
+    print(date+" date");
+    print(sendby+" sendby");
+    print(message+" mesaj");
+    if(sendby==Constants.myName) {
+      bool b = true;
+      messageTile tile = new messageTile(date, sendby, message,b);
+      liste.add(tile);
+    }
+    else {
+      bool b = false;
+      messageTile tile = new messageTile(date, sendby, message,b);
+      liste.add(tile);
     }
 
-    catch(e) {
-
-    }
   }
-  getLastMessage(String email) async {
-    List<messageTile> liste = [];
-    ChatRoomInfo info = new ChatRoomInfo();
-    await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messageCount").snapshots().listen((event) {Map<String, dynamic>? data = event.data()!;
-    info.setCount(data["count"]); });
-    int k = info.message_count;
-    message m = new message();
-    await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc(k.toString()).snapshots().listen((event) {Map<String, dynamic>? data = event.data()!;
-    m.setMessage(data["message"]);
-    m.setSendBy(data["sendby"]);
-    m.setDate(data["date"]);
-    messageTile tile = new messageTile(m.date, m.sendby, m.mesaj);
-    liste.add(tile); });
-    return liste.last;
-  }
-  getMessages(String email) async {
-   //message_list.clear();
-    List<messageTile> liste = [];
-    ChatRoomInfo info = new ChatRoomInfo();
-   //String date = DateTime.now().toString();
+  getMessages(String email,List<messageTile> liste) async {
+    DocumentSnapshot ds = await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messagecount").get();
+    int messagecount = ds.get("count");
+   for (var i=messagecount;i>0;i--) {
 
-   /*await FirebaseFirestore.instance.collection("chatroom").orderBy(false).snapshots().listen((event) {
-     QuerySnapshot<Map<String, dynamic>> data = event;
-      for(var i=0;i<event.docs.length;i++) {
-        print(event.docs.length.toString()+" MESSAGE COUNT");
-     //message m = new message();
-        Map<String,dynamic> map = event.docs.elementAt(i).data();
-     m.setDate(map['date']);
-     m.setSendBy(map['sendby']);
-     m.setMessage(map['message']);
-     messageTile tile = new messageTile(m.date, m.sendby, m.mesaj);
-     message_list.add(tile);
+     DocumentSnapshot ds2 = await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc(i.toString()).get();
+     String date = ds2.get("date");
+     String message = ds2.get("message");
+     String sendby = ds2.get("sendby");
+     if(sendby==Constants.myName) {
+       bool b = true;
+       messageTile tile = new messageTile(date, sendby, message,b);
+       liste.add(tile);
+     }
+     else {
+       bool b = false;
+       messageTile tile = new messageTile(date, sendby, message,b);
+       liste.add(tile);
+     }
+
    }
-    });*/
-   /* await FirebaseFirestore.instance.collection("chatroom").doc(email+"_"+Constants.myName+"_"+date).snapshots().listen((event) { Map<String, dynamic>? data = event.data()!;
-    m.setDate(data['date']);
-    m.setSendBy(data['sendby']);
-    m.setMessage(data['message']);
-    messageTile tile = new messageTile(m.date,m.sendby, m.mesaj);
-    message_list.add(tile);*/
-   await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messageCount").snapshots().listen((event) { Map<String, dynamic>? data = event.data()!;
-   info.setCount(data["count"]); });
-   for (var i=info.message_count;i>0;i--) {
-     message m = new message();
-     await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc(i.toString()).snapshots().listen((event) { Map<String, dynamic>? data = event.data()!;
-     m.setMessage(data["message"]);
-     m.setSendBy(data["sendby"]);
-     m.setDate(data["date"]);
-     messageTile tile = new messageTile(m.date, m.sendby, m.mesaj);
-     liste.add(tile);
-     });
-
-    }
-
-   return liste;
-
-
+   print(liste.length.toString()+" SİZE");
 
   }
 
