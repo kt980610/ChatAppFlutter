@@ -1,11 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:housingapp/constants/currentUser.dart';
 import 'package:housingapp/services/User.dart';
 import 'package:housingapp/services/database.dart';
 import 'package:housingapp/widgets/UserProfile.dart';
 import 'package:housingapp/pages/navpages/chatRoom.dart';
+import 'package:flutter_chat_bubble/bubble_type.dart';
+import 'package:flutter_chat_bubble/chat_bubble.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_1.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_10.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_2.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_3.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_4.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_5.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_6.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_7.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_8.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_9.dart';
 class BarItemPage extends StatelessWidget {
   const BarItemPage({Key? key}) : super(key: key);
 
@@ -111,31 +124,8 @@ class searchTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(crossAxisAlignment:CrossAxisAlignment.start,children: [Text(this.email,style: TextStyle(color: Colors.black),),Text(this.name,style: TextStyle(color: Colors.black)),Text(this.surname,style: TextStyle(color: Colors.black)), ],),Spacer(),IconButton(onPressed: () {
       List<messageTile> liste = [];
-      ChatRoomInfo info= new ChatRoomInfo();//db.getMessages(this.email);
-      FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messageCount").snapshots().listen((event) { Map<String, dynamic>? data = event.data()!;
-      //info.setCount(data["count"]);
-      info.setCount(data["count"]);
-      for (var i=info.message_count;i>0;i--) {
-        message m = new message();
-        FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc(i.toString()).snapshots().listen((event) { Map<String, dynamic>? data = event.data()!;
-        m.setMessage(data["message"]);
-        m.setSendBy(data["sendby"]);
-        m.setDate(data["date"]);
-        messageTile tile = new messageTile(m.date, m.sendby, m.mesaj);
-        liste.add(tile);
-        });
-
-      }
+      db.getMessages(this.email, liste);
       Navigator.push(context, MaterialPageRoute(builder: (context) => chatRoom(email, liste)),);
-
-
-
-
-
-
-
-      });
-
     }, icon: Icon(Icons.chat)),AddFriendButton(this.email)],),);
   }
 }
@@ -147,10 +137,19 @@ class messageTile extends StatelessWidget {
   String date;
   String sendby;
   String message_sent;
-  messageTile(this.date,this.sendby,this.message_sent);
+  bool sender_or_recevier;
+  messageTile(this.date,this.sendby,this.message_sent,this.sender_or_recevier);
   @override
   Widget build(BuildContext context) {
-    return Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(children: [Text(this.date,style: TextStyle(color: Colors.black),),Text(this.sendby,style: TextStyle(color: Colors.black)),Text(this.message_sent,style: TextStyle(color: Colors.black)), ],),Spacer(),],));
+    if(this.sender_or_recevier) {
+      return ChatBubble(backGroundColor: Colors.lightGreen,clipper: ChatBubbleClipper1(type: BubbleType.sendBubble),child: Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(children: [Text(this.date,style: TextStyle(color: Colors.black),),Text(this.sendby,style: TextStyle(color: Colors.black)),Text(this.message_sent,style: TextStyle(color: Colors.black)) ],),],)) ,);
+
+    }
+    else {
+      return ChatBubble(backGroundColor: Colors.lightGreen,clipper: ChatBubbleClipper1(type: BubbleType.receiverBubble),child: Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(children: [Text(this.date,style: TextStyle(color: Colors.black),),Text(this.sendby,style: TextStyle(color: Colors.black)),Text(this.message_sent,style: TextStyle(color: Colors.black)) ],),],)) ,);
+
+    }
+      // return Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(children: [Text(this.date,style: TextStyle(color: Colors.black),),Text(this.sendby,style: TextStyle(color: Colors.black)),Text(this.message_sent,style: TextStyle(color: Colors.black)) ],),],));
   }
 }
 
