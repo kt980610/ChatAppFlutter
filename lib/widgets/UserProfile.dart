@@ -201,6 +201,7 @@ class MyProfile extends StatelessWidget {
                           children: [
 
                             MyInfo(this.nameSurname,this.imagePath,this.age,this.isStudent,this.uni),
+                           // GestureDetector(onTap: () {},),
                           ],
                         ),
                       ),

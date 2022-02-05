@@ -145,11 +145,11 @@ class messageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if(this.sender_or_recevier) {
-      return ChatBubble(elevation: 20,margin: EdgeInsets.all(20),backGroundColor: Colors.lightGreen,clipper: ChatBubbleClipper1(type: BubbleType.sendBubble),child: Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(children: [Text(this.date,style: TextStyle(color: Colors.black),),Text(this.sendby,style: TextStyle(color: Colors.black)),Text(this.message_sent,style: TextStyle(color: Colors.black)) ],),],)) ,);
+      return ChatBubble(elevation: 20,margin: EdgeInsets.all(20),backGroundColor: Colors.grey,clipper: ChatBubbleClipper1(type: BubbleType.sendBubble),child: Container(padding: EdgeInsets.all(10),color: Colors.grey, alignment:Alignment.center, child: Row(children: [Column(children: [Text(this.date,style: TextStyle(color: Colors.black),),Text(this.sendby,style: TextStyle(color: Colors.black)),Text(this.message_sent,style: TextStyle(color: Colors.black)) ],),],)) ,);
 
     }
     else {
-      return ChatBubble(backGroundColor: Colors.lightGreen,clipper: ChatBubbleClipper1(type: BubbleType.receiverBubble),child: Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(children: [Text(this.date,style: TextStyle(color: Colors.black),),Text(this.sendby,style: TextStyle(color: Colors.black)),Text(this.message_sent,style: TextStyle(color: Colors.black)) ],),],)) ,);
+      return ChatBubble(elevation: 20,margin: EdgeInsets.all(20),backGroundColor: Colors.lightGreen,clipper: ChatBubbleClipper1(type: BubbleType.receiverBubble),child: Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(children: [Text(this.date,style: TextStyle(color: Colors.black),),Text(this.sendby,style: TextStyle(color: Colors.black)),Text(this.message_sent,style: TextStyle(color: Colors.black)) ],),],)) ,);
 
     }
       // return Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(children: [Text(this.date,style: TextStyle(color: Colors.black),),Text(this.sendby,style: TextStyle(color: Colors.black)),Text(this.message_sent,style: TextStyle(color: Colors.black)) ],),],));
