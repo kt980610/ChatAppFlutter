@@ -81,6 +81,10 @@ class database {
     await FirebaseFirestore.instance.collection(email).doc("chatroom").collection(Constants.myName).doc(message_count.toString()).set({"message":message_sent,"sendby":Constants.myName,"date":s});
 
   }*/
+  void getMessageCount(int count, String email) async {
+    DocumentSnapshot ds = await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messagecount").get();
+    int count = ds.get("count");
+  }
   void incrementMessageCount(String email) async {
 
    // FirebaseFirestore.instance.collection(collectionPath)

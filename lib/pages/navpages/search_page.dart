@@ -5,7 +5,7 @@ import 'package:housingapp/widgets/UserProfile.dart';
 
 class SearchPage extends StatelessWidget {
 
-  List<Widget> profiles = [UserProfile("img/welcome-one.png", "kerem tuna",23,true,"Özyeğin Üniversitesi","müzik film",0),UserProfile("img/hiking.png", "emin kartcı",22,true,"Özyeğin Üniversitesi","bilim müzik kitap",1)];
+  List<Widget> profiles = [UserProfile("img/welcome-one.png", "kerem tuna",23,true,"Özyeğin Üniversitesi","müzik film",0,"kerem.tuna@windowslive.com"),UserProfile("img/hiking.png", "emin kartcı",22,true,"Özyeğin Üniversitesi","bilim müzik kitap",1,"emin@gmail.com")];
   SearchPage();
   @override
   Widget build(BuildContext context) {

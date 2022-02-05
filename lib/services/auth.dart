@@ -43,6 +43,9 @@ class auth {
    // await Firebase.initializeApp();
 
    try {
+     DocumentSnapshot ds = await FirebaseFirestore.instance.collection("userCount").doc("usercount").get();
+     int count = ds.get("count")+1;
+     FirebaseFirestore.instance.collection("userCount").doc("usercount").set({"count":count});
      UserCredential newUser = await FirebaseAuth.instance
          .createUserWithEmailAndPassword(
          email: email, password: password);

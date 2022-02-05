@@ -6,6 +6,9 @@ import 'package:housingapp/pages/navpages/my_page.dart';
 import 'package:housingapp/pages/navpages/search_page.dart';
 import 'package:housingapp/services/database.dart';
 import 'package:housingapp/pages/navpages/chatRoom.dart';
+import 'package:housingapp/pages/navpages/bar_item_page.dart';
+import 'package:housingapp/pages/navpages/chatRoom.dart';
+import 'package:housingapp/constants/currentUser.dart';
 class UserProfile extends StatelessWidget {
   String imagepath;
   String nameSurname;
@@ -14,7 +17,8 @@ class UserProfile extends StatelessWidget {
   String uni;
   String interests;
   int housemates;
-  UserProfile(this.imagepath,this.nameSurname,this.age,this.isStudent,this.uni,this.interests,this.housemates);
+  String email2;
+  UserProfile(this.imagepath,this.nameSurname,this.age,this.isStudent,this.uni,this.interests,this.housemates,this.email2);
   @override
   Widget build(BuildContext context) {
     return Container(decoration: BoxDecoration(
@@ -45,7 +49,7 @@ class UserProfile extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.end,
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-    buildUserInfo(this.nameSurname,this.imagepath,this.age,this.isStudent,this.uni,this.interests,this.housemates),
+    buildUserInfo(this.nameSurname,this.imagepath,this.age,this.isStudent,this.uni,this.interests,this.housemates,this.email2),
     Padding(
     padding: EdgeInsets.only(bottom: 16, right: 8),
     child: AddButton(),
@@ -67,7 +71,8 @@ class buildUserInfo extends StatelessWidget {
   String uni;
   String interests;
   int housemates;
-  buildUserInfo(this.nameSurname,this.imagePath,this.age,this.isStudent,this.uni,this.interests,this.housemates);
+  String email2;
+  buildUserInfo(this.nameSurname,this.imagePath,this.age,this.isStudent,this.uni,this.interests,this.housemates,this.email2);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -77,7 +82,7 @@ class buildUserInfo extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextButton(onPressed: () { 
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(this.nameSurname, this.imagePath, this.age,this.isStudent,this.uni,this.interests,this.housemates),));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(this.nameSurname, this.imagePath, this.age,this.isStudent,this.uni,this.interests,this.housemates,this.email2),));
           } ,child:Text(
             this.nameSurname + ", " + this.age.toString(),
             style: TextStyle(
@@ -210,9 +215,9 @@ class MyProfile extends StatelessWidget {
             top: screenHeight*0.7,
             left: 16,
             right: 16,
-            child: Container(
-              height: 80,
-              child: Row(
+            child: Column(
+              //height: 80,
+              children: [Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
@@ -221,9 +226,36 @@ class MyProfile extends StatelessWidget {
 
 
                 ],
-              ),
+              ), Container(height: 20,),  Card(
+
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Container(height: 75,width: 250,
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                    top: 0,
+                    bottom: 0,
+                    right: 16,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Icon(Icons.email),
+                      ),
+                      Text("Email"),
+                      Text(Constants.myName),
+                    ],
+                  ),
+                ),
+              ),],
             ),
           ),
+
 
         ],
       ),
@@ -234,12 +266,14 @@ class MyProfile extends StatelessWidget {
 class Profile extends StatelessWidget {
   String nameSurname;
   String imagePath;
+  String email="";
   int age;
   bool isStudent;
   String uni;
   String interests;
   int housemates;
-  Profile(this.nameSurname,this.imagePath,this.age,this.isStudent,this.uni,this.interests,this.housemates);
+ String email2;
+  Profile(this.nameSurname,this.imagePath,this.age,this.isStudent,this.uni,this.interests,this.housemates,this.email2);
 
   @override
   Widget build(BuildContext context) {
@@ -275,21 +309,48 @@ class Profile extends StatelessWidget {
 
             ],
           ),
+
           Positioned(
             top: screenHeight*0.7,
             left: 16,
             right: 16,
-            child: Container(
-              height: 80,
-              child: Row(
+            child: Column(
+              //height: 80,
+              children: [Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
+                //mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   ProfileInfoBigCard("ilgi alanları: ", this.interests, Icon(Icons.addchart)),
                   ProfileInfoBigCard("mevcut ev arkadaşı: ", this.housemates.toString(), Icon(Icons.contacts)),
 
                 ],
-              ),
+              ), Container(height: 20,), Card(
+
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Container(height: 75,width: 250,
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                    top: 0,
+                    bottom: 0,
+                    right: 16,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Icon(Icons.email),
+                      ),
+                      Text("Email"),
+                      Text(this.email2),
+                    ],
+                  ),
+                ),
+              ),],
             ),
           ),
 
@@ -401,7 +462,7 @@ class ProfileInfoBigCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Container(height: 250,width: 150,
+      child: Container(height: 75,width: 150,
         padding: const EdgeInsets.only(
           left: 16.0,
           top: 0,

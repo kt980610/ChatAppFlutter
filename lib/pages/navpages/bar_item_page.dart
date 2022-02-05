@@ -119,13 +119,16 @@ class searchTile extends StatelessWidget {
   String email;
   String name;
   String surname;
+  int messagecount=0;
   searchTile(this.email,this.name,this.surname);
   @override
   Widget build(BuildContext context) {
     return Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(crossAxisAlignment:CrossAxisAlignment.start,children: [Text(this.email,style: TextStyle(color: Colors.black),),Text(this.name,style: TextStyle(color: Colors.black)),Text(this.surname,style: TextStyle(color: Colors.black)), ],),Spacer(),IconButton(onPressed: () {
       List<messageTile> liste = [];
       db.getMessages(this.email, liste);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => chatRoom(email, liste)),);
+      this.messagecount=liste.length;
+      print(liste.length.toString()+" SİZE");
+      Navigator.push(context, MaterialPageRoute(builder: (context) => chatRoom(email, liste,this.messagecount)),);
     }, icon: Icon(Icons.chat)),AddFriendButton(this.email)],),);
   }
 }
@@ -142,7 +145,7 @@ class messageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if(this.sender_or_recevier) {
-      return ChatBubble(backGroundColor: Colors.lightGreen,clipper: ChatBubbleClipper1(type: BubbleType.sendBubble),child: Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(children: [Text(this.date,style: TextStyle(color: Colors.black),),Text(this.sendby,style: TextStyle(color: Colors.black)),Text(this.message_sent,style: TextStyle(color: Colors.black)) ],),],)) ,);
+      return ChatBubble(elevation: 20,margin: EdgeInsets.all(20),backGroundColor: Colors.lightGreen,clipper: ChatBubbleClipper1(type: BubbleType.sendBubble),child: Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(children: [Text(this.date,style: TextStyle(color: Colors.black),),Text(this.sendby,style: TextStyle(color: Colors.black)),Text(this.message_sent,style: TextStyle(color: Colors.black)) ],),],)) ,);
 
     }
     else {
