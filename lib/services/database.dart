@@ -139,6 +139,11 @@ class database {
       messageTile tile = new messageTile(date, sendby, message,b);
       liste.add(tile);
     }
+    List<messageTile> liste2 = [];
+    liste.sort((a,b) => a.date.compareTo(b.date));
+    liste2.addAll(liste.reversed);
+    liste.clear();
+    liste.addAll(liste2);
 
   }
   getMessages(String email,List<messageTile> liste) async {
