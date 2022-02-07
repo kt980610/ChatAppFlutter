@@ -49,7 +49,7 @@ class _userSearchState extends State<userSearch> {
   String email = "";
 
   Widget w = Container();
- // List<searchTile> liste = [];
+  //List<searchTile> liste = [];
   @override
   Widget build(BuildContext context) {
 
@@ -73,21 +73,19 @@ class _userSearchState extends State<userSearch> {
                      //liste.clear();
 
                    // print(liste.last.email+ " EMAİL");
-                    List<UserNew> liste = [];
+                   /*  List<UserNew> liste2 = [];
+                    db.search_user_by_mail(email, liste2);*/
                     setState(() {
 
-                     /* db.search_user_by_mail(email, liste);
-                      UserNew u = liste.last;
-                      searchTile tile = new searchTile(u.email, u.name, u.surname);
-                      w = tile;*/
 
-                      FirebaseFirestore.instance.collection("Users2").doc(email).snapshots().listen((event) {
-                        Map<String, dynamic> data = event.data()!;
-                        searchTile tile = new searchTile(data['email'],data['isim'],data['soyisim']);
+                     // UserNew u = liste2.last;
+                      searchTile tile = new searchTile(email,"","");
                       w = tile;
-                      print(data['email']);
 
-                      });
+
+                     // print(data['email']);
+
+
                       //liste.clear();
                       //db.create_chatroom(email);
                       //db.addMessage("message", email);

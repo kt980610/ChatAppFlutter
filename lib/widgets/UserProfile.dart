@@ -141,7 +141,7 @@ class AddFriendButtonState extends State<AddFriendButton> {
   }
   @override
   Widget build(BuildContext context) {
-    return IconButton(onPressed: added, icon: i,);
+    return IconButton(onPressed: () { added();}, icon: i,);
   }
 
 

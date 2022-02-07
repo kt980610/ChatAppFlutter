@@ -47,23 +47,18 @@ class auth {
      DocumentSnapshot ds = await FirebaseFirestore.instance.collection("userCount").doc("usercount").get();
      int count = ds.get("count")+1;
      FirebaseFirestore.instance.collection("userCount").doc("usercount").set({"count":count});
-   UserCredential newUser = await FirebaseAuth.instance
+     UserCredential newUser = await FirebaseAuth.instance
          .createUserWithEmailAndPassword(
          email: email, password: password);
 
 
 
-     var arr = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
 
 
-      FirebaseFirestore.instance.collection("UsersV2").doc(count.toString()).set({})
-     FirebaseFirestore.instance.collection("UsersV2").doc(count.toString()).set({"isim":name1});
 
-     FirebaseFirestore.instance.collection("UsersV2").doc(count.toString()).set({"soyisim":surname1});
-     
      FirebaseFirestore.instance.collection("UsersV2").doc(count.toString()).set({"email":email});
-     FirebaseFirestore.instance.collection("UsersV2").doc(count.toString()).set({"kriterler":arr});
-    FirebaseFirestore.instance.collection("Users").doc(email).collection("kimlik").doc("isim").set({"isim": name1});
+
+     FirebaseFirestore.instance.collection("Users").doc(email).collection("kimlik").doc("isim").set({"isim": name1});
      FirebaseFirestore.instance.collection("Users").doc(email).collection("kimlik").doc("soyisim").set(
          {"soyisim": surname1});
      FirebaseFirestore.instance.collection("Users").doc(email).collection("kimlik").doc("email").set(

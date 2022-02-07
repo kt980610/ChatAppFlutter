@@ -14,10 +14,15 @@ import 'package:housingapp/pages/navpages/chatRoom.dart';
 class database {
   database();
    search_user_by_mail(String mail,List<UserNew> liste) async {
-     DocumentSnapshot ds = await FirebaseFirestore.instance.collection("Users2").doc(mail).get();
-     String name = ds.get("isim");
-     String surname = ds.get("soyisim");
-     String email = ds.get("email");
+     DocumentSnapshot ds1 = await FirebaseFirestore.instance.collection("Users").doc(mail).collection("kimlik").doc("email").get();
+     DocumentSnapshot ds2 = await FirebaseFirestore.instance.collection("Users").doc(mail).collection("kimlik").doc("isim").get();
+     DocumentSnapshot ds3 = await FirebaseFirestore.instance.collection("Users").doc(mail).collection("kimlik").doc("soyisim").get();
+
+
+
+     String name = ds2.get("isim");
+     String surname = ds3.get("soyisim");
+     String email = ds1.get("email");
 
 
      UserNew u = new UserNew();
@@ -107,20 +112,21 @@ class database {
   void addMessage(String message_sent, String email) async {
 
 
-    DocumentSnapshot ds = await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messagecount").get();
+    DocumentSnapshot ds = await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messageCount").get();
     int messagecount = ds.get("count");
 
     int count = messagecount+1;
 
     String date = DateTime.now().toString();
-    await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messagecount").set({"count":count});
-    await FirebaseFirestore.instance.collection(email).doc("chatroom").collection(Constants.myName).doc("messagecount").set({"count":count});
+    await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messageCount").set({"count":count});
+    await FirebaseFirestore.instance.collection(email).doc("chatroom").collection(Constants.myName).doc("messageCount").set({"count":count});
     await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc(count.toString()).set({"message":message_sent,"date":date,"sendby":Constants.myName});
     await FirebaseFirestore.instance.collection(email).doc("chatroom").collection(Constants.myName).doc(count.toString()).set({"message":message_sent,"date":date,"sendby":Constants.myName});
 
   }
+
  void getLastMessage(String email,List<messageTile> liste) async {
-    DocumentSnapshot ds = await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messagecount").get();
+    DocumentSnapshot ds = await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messageCount").get();
     int messagecount = ds.get("count");
     DocumentSnapshot ds2 = await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc(messagecount.toString()).get();
     String date = ds2.get("date");
@@ -147,7 +153,7 @@ class database {
 
   }
   getMessages(String email,List<messageTile> liste) async {
-    DocumentSnapshot ds = await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messagecount").get();
+    DocumentSnapshot ds = await FirebaseFirestore.instance.collection(Constants.myName).doc("chatroom").collection(email).doc("messageCount").get();
     int messagecount = ds.get("count");
    for (var i=messagecount;i>0;i--) {
 

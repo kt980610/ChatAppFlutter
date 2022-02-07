@@ -65,8 +65,8 @@ class _chatRoomState extends State<chatRoom> {
                 onTap: () {
 
                       setState(() {
-                        db.addMessage(message_sent, email);
-                        db.getLastMessage(email, this.liste);
+                        db.addMessage(message_sent, this.email);
+                        db.getLastMessage(this.email, this.liste);
 
 
 
