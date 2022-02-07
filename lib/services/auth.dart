@@ -5,6 +5,7 @@ import 'package:housingapp/pages/navpages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:housingapp/pages/LoginPage.dart';
+import 'dart:convert';
 class auth {
 
   int count = 0;
@@ -46,14 +47,29 @@ class auth {
      DocumentSnapshot ds = await FirebaseFirestore.instance.collection("userCount").doc("usercount").get();
      int count = ds.get("count")+1;
      FirebaseFirestore.instance.collection("userCount").doc("usercount").set({"count":count});
-     UserCredential newUser = await FirebaseAuth.instance
+   UserCredential newUser = await FirebaseAuth.instance
          .createUserWithEmailAndPassword(
          email: email, password: password);
-     FirebaseFirestore.instance.collection("Users").doc(email).collection("kimlik").doc("isim").set({"isim": name1});
+
+
+
+     var arr = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
+
+
+      FirebaseFirestore.instance.collection("UsersV2").doc(count.toString()).set({})
+     FirebaseFirestore.instance.collection("UsersV2").doc(count.toString()).set({"isim":name1});
+
+     FirebaseFirestore.instance.collection("UsersV2").doc(count.toString()).set({"soyisim":surname1});
+     
+     FirebaseFirestore.instance.collection("UsersV2").doc(count.toString()).set({"email":email});
+     FirebaseFirestore.instance.collection("UsersV2").doc(count.toString()).set({"kriterler":arr});
+    FirebaseFirestore.instance.collection("Users").doc(email).collection("kimlik").doc("isim").set({"isim": name1});
      FirebaseFirestore.instance.collection("Users").doc(email).collection("kimlik").doc("soyisim").set(
          {"soyisim": surname1});
      FirebaseFirestore.instance.collection("Users").doc(email).collection("kimlik").doc("email").set(
          {"email": email});
+     FirebaseFirestore.instance.collection("Users").doc(email).collection("index").doc("index").set(
+         {"index": count});
      FirebaseFirestore.instance.collection("Users").doc(email).collection("kriterler").doc("alkol").set(
          {"alkol": "-1"});
      FirebaseFirestore.instance.collection("Users").doc(email).collection("kriterler").doc("düzen").set(
