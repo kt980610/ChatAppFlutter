@@ -13,23 +13,22 @@ import 'package:housingapp/pages/navpages/bar_item_page.dart';
 import 'package:housingapp/pages/navpages/chatRoom.dart';
 class database {
   database();
-   search_user_by_mail(String mail,List<UserNew> liste) async {
+  List<searchTile> liste = [];
+   search_user_by_mail(String mail) async {
      DocumentSnapshot ds1 = await FirebaseFirestore.instance.collection("Users").doc(mail).collection("kimlik").doc("email").get();
      DocumentSnapshot ds2 = await FirebaseFirestore.instance.collection("Users").doc(mail).collection("kimlik").doc("isim").get();
      DocumentSnapshot ds3 = await FirebaseFirestore.instance.collection("Users").doc(mail).collection("kimlik").doc("soyisim").get();
 
 
-
      String name = ds2.get("isim");
      String surname = ds3.get("soyisim");
      String email = ds1.get("email");
+      print(name+ " NAME");
 
 
-     UserNew u = new UserNew();
-     u.setEmail(email);
-     u.setName(name);
-     u.setSurname(surname);
-     liste.add(u);
+     searchTile tile = new searchTile(email, name, surname);
+     liste.add(tile);
+    // liste.add(u);
      // DocumentReference docref = FirebaseFirestore.instance.collection("Users").
 
    

@@ -41,7 +41,7 @@ class _chatRoomState extends State<chatRoom> {
     if(this.messagecount>this.liste.length) {
       setState(() {
         db.getLastMessage(this.email, this.liste);
-
+        //print("last message came");
       });
     }
     return Scaffold(

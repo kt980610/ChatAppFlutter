@@ -47,11 +47,10 @@ class userSearch extends StatefulWidget {
 class _userSearchState extends State<userSearch> {
   database db = new database();
   String email = "";
-
   Widget w = Container();
   //List<searchTile> liste = [];
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
 
       return Scaffold(
         appBar: AppBar(title: Text("Ara"), backgroundColor: Colors.green,),
@@ -71,17 +70,15 @@ class _userSearchState extends State<userSearch> {
                   child: Icon(Icons.search), height: 40, width: 40,),
                   onTap: () {
                      //liste.clear();
+                    db.search_user_by_mail(email);
 
                    // print(liste.last.email+ " EMAİL");
                    /*  List<UserNew> liste2 = [];
                     db.search_user_by_mail(email, liste2);*/
-                    setState(() {
+                    setState(()  {
 
 
-                     // UserNew u = liste2.last;
-                      searchTile tile = new searchTile(email,"","");
-                      w = tile;
-
+                     w = db.liste.last;
 
                      // print(data['email']);
 
@@ -122,11 +119,11 @@ class searchTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(crossAxisAlignment:CrossAxisAlignment.start,children: [Text(this.email,style: TextStyle(color: Colors.black),),Text(this.name,style: TextStyle(color: Colors.black)),Text(this.surname,style: TextStyle(color: Colors.black)), ],),Spacer(),IconButton(onPressed: () {
-      List<messageTile> liste = [];
-      db.getMessages(this.email, liste);
-      this.messagecount=liste.length;
-      print(liste.length.toString()+" SİZE");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => chatRoom(email, liste,this.messagecount)),);
+      List<messageTile> liste2 = [];
+      db.getMessages(this.email, liste2);
+      this.messagecount=liste2.length;
+      print(liste2.length.toString()+" SİZE");
+      Navigator.push(context, MaterialPageRoute(builder: (context) => chatRoom(email, liste2,this.messagecount)),);
     }, icon: Icon(Icons.chat)),AddFriendButton(this.email)],),);
   }
 }
@@ -154,3 +151,18 @@ class messageTile extends StatelessWidget {
   }
 }
 
+void createtile(searchTile tile, String emaill) async {
+  DocumentSnapshot ds1 = await FirebaseFirestore.instance.collection("Users").doc(emaill).collection("kimlik").doc("email").get();
+  DocumentSnapshot ds2 = await FirebaseFirestore.instance.collection("Users").doc(emaill).collection("kimlik").doc("isim").get();
+  DocumentSnapshot ds3 = await FirebaseFirestore.instance.collection("Users").doc(emaill).collection("kimlik").doc("soyisim").get();
+
+
+  String name2 = ds2.get("isim");
+  String surname2 = ds3.get("soyisim");
+  String email2 = ds1.get("email");
+
+  // UserNew u = liste2.last;
+  tile = new searchTile(email2,name2,surname2);
+ // w1 = tile;
+
+}
