@@ -34,7 +34,7 @@ class BarItemPage extends StatelessWidget {
   }
 }
 List<searchTile> tileList = [];
-List<UserNew> userlist = [];
+
 class userSearch extends StatefulWidget {
   const userSearch({Key? key}) : super(key: key);
 
@@ -119,18 +119,16 @@ class searchTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(padding: EdgeInsets.all(10),color: Colors.lightGreen, alignment:Alignment.center, child: Row(children: [Column(crossAxisAlignment:CrossAxisAlignment.start,children: [Text(this.email,style: TextStyle(color: Colors.black),),Text(this.name,style: TextStyle(color: Colors.black)),Text(this.surname,style: TextStyle(color: Colors.black)), ],),Spacer(),IconButton(onPressed: () {
-      List<messageTile> liste2 = [];
-      db.getMessages(this.email, liste2);
-      this.messagecount=liste2.length;
-      print(liste2.length.toString()+" SİZE");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => chatRoom(email, liste2,this.messagecount)),);
+      //List<messageTile> liste2 = [];
+      Constants.messageList.clear();
+      Constants.db.getMessages(this.email);
+      this.messagecount=Constants.messageList.length;
+      //print(liste2.length.toString()+" SİZE");
+      Navigator.push(context, MaterialPageRoute(builder: (context) => chatRoom(email, this.messagecount)),);
     }, icon: Icon(Icons.chat)),AddFriendButton(this.email)],),);
   }
 }
- void addUser(UserNew u) {
-  userlist.clear();
-  userlist.add(u);
-}
+
 class messageTile extends StatelessWidget {
   String date;
   String sendby;

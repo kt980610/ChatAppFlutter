@@ -5,6 +5,8 @@ import 'package:housingapp/pages/navpages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:housingapp/pages/LoginPage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:housingapp/widgets/UserProfile.dart';
 import 'dart:convert';
 class auth {
 
@@ -16,7 +18,11 @@ class auth {
           email: email,
           password: password
       );
+
       Constants.myName=email;
+      var url1 = await FirebaseStorage.instance.ref(Constants.myName).getDownloadURL();
+      Constants.imgpath = url1.toString();
+      Constants.db.setUserList();
       Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()),);
     } on FirebaseAuthException catch (e) {
      // Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()),);

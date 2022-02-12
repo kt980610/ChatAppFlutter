@@ -10,43 +10,45 @@ import 'package:housingapp/pages/navpages/bar_item_page.dart';
 import 'package:housingapp/constants/currentUser.dart';
 class chatRoom extends StatefulWidget {
   String email;
-  List<messageTile> liste;
   int messagecount;
-  chatRoom(this.email,this.liste,this.messagecount);
+  chatRoom(this.email,this.messagecount);
 
   @override
-  _chatRoomState createState() => _chatRoomState(this.email,this.liste,this.messagecount);
+  _chatRoomState createState() => _chatRoomState(this.email,this.messagecount);
 }
 ChatRoomInfo info = new ChatRoomInfo();
-List<messageTile> message_list = [];
-database db = new database();
+//database db = new database();
 
 class _chatRoomState extends State<chatRoom> {
-  List<messageTile> liste = [];
+
   int messagecount;
   String message_sent = "";
  late String email;
 
 
 
-  _chatRoomState(this.email,this.liste,this.messagecount);
+  _chatRoomState(this.email,this.messagecount);
 
   //List<messageTile> message_list1 = db.getMessages(this.email);
   String s = "";
 
   @override
   Widget build(BuildContext context) {
-    db.getMessageCount(this.messagecount,this.email);
-    //db.getMessages(this.email,this.liste);
-    if(this.messagecount>this.liste.length) {
-      setState(() {
-        db.getLastMessage(this.email, this.liste);
-        //print("last message came");
-      });
-    }
+    Constants.db.getMessageCount(this.messagecount,this.email);
+    Constants.db.getMessages(this.email);
+    if(this.messagecount>Constants.messageList.length) {
+      Constants.db.getLastMessage(this.email);
+      List<messageTile> list2 = [];
+      list2.addAll(Constants.messageList);
+      Constants.messageList.clear();
+    print("last message came");
+    setState(() {
+      Constants.messageList.addAll(list2);
+  });
+  }
     return Scaffold(
       appBar: AppBar(leading: roundedImage('img/welcome-one.png',10),title: Text(this.email),backgroundColor: Colors.green,),
-      body: Stack(children: [ ListView(dragStartBehavior: DragStartBehavior.down,children: this.liste,reverse: true,),SizedBox(child: Container(),),
+      body: Stack(children: [ ListView(dragStartBehavior: DragStartBehavior.down,children: Constants.messageList,reverse: true,),SizedBox(child: Container(),),
         Container(padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),alignment: Alignment.bottomCenter,
           child: Row(crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -62,13 +64,16 @@ class _chatRoomState extends State<chatRoom> {
                     hintText: "Mesaj"),),),
               GestureDetector(child: Container(
                 child: Icon(Icons.send), height: 40, width: 40,),
-                onTap: () {
+                onTap: () async {
 
+                  Constants.db.addMessage(message_sent, this.email);
+                  await Constants.db.getLastMessage(this.email);
+                  List<messageTile> list3 = [];
+                  list3.addAll(Constants.messageList);
+                  Constants.messageList.clear();
                       setState(() {
-                        db.addMessage(message_sent, this.email);
-                        db.getLastMessage(this.email, this.liste);
 
-
+                            Constants.messageList.addAll(list3);
 
 
 

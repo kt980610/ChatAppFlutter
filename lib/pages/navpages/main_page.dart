@@ -1,34 +1,37 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:housingapp/pages/navpages/bar_item_page.dart';
 import 'package:housingapp/pages/navpages/home_page.dart';
 import 'package:housingapp/pages/navpages/my_page.dart';
 import 'package:housingapp/pages/navpages/search_page.dart';
-
+import 'package:housingapp/constants/currentUser.dart';
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();
 }
+int currentIndex = 0;
+
 
 class _MainPageState extends State<MainPage> {
+  void onTap(int index,BuildContext context){
 
-  List pages = [
-    HomePage(),
-    userSearch(),
-    SearchPage(),
-    MyPage()
-  ];
-
-  int currentIndex = 0;
-  void onTap(int index){
     setState(() {
       currentIndex = index;
     });
 
-  }
 
+  }
+  List pages = [
+    HomePage(),
+    userSearch(),
+    SearchPage(),
+    MyPage(),
+  ];
+
+ // int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +40,12 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
         backgroundColor: Colors.white,
-        onTap: onTap,
+        onTap: (index) {
+        setState(() {
+        currentIndex = index;
+        });
+
+        },
         currentIndex: currentIndex,
         selectedItemColor: Colors.black54,
         unselectedItemColor: Colors.grey.withOpacity(0.5),
